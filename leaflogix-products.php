@@ -80,6 +80,7 @@ function leaflogix_settings_page_func() {
 		    <?php do_settings_sections( LEAFLOGIX_SETTINGS_PAGE_SLUG )?>
 		    <?php submit_button();?>
         </form>
+        <div class="help-text"><em>For an API key contact <a href="https://leaflogix.com/" target="_blank">Leaflogix</a>. For documentation and testing you can test your API key via the <a href="http://leaflogix-publicapi.azurewebsites.net/swagger/" target="_blank">LeafLogixAPI documentation</a>.</em></div>
     </div>
     <?php
 
