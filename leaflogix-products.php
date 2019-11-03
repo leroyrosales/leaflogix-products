@@ -1,8 +1,4 @@
 <?php
-/**
- * @package Leaflogix Products
- * @version 0.1.0
- */
 /*
 Plugin Name: Leaflogix Products
 Description: WordPress plugin to create products listing via the Leaflogix API.
