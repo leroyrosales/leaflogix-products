@@ -29,7 +29,7 @@ function leaflogix_settings_init() {
 
 	add_settings_section(
 		"leaflogix-settings-section", // id of the section
-		"Leaflogix Settings", // title to be displayed
+		"", // title to be displayed
 		"", // callback function to be called when opening section
 		LEAFLOGIX_SETTINGS_PAGE_SLUG // page on which to display the section, this should be the same as the slug used in add_submenu_page()
 	);
@@ -61,6 +61,7 @@ function leaflogix_settings_cb() {
 
 }
 
+
 // The settings page form
 function leaflogix_settings_page_func() {
 	// check user capabilities
@@ -70,14 +71,29 @@ function leaflogix_settings_page_func() {
 	?>
 
     <div class="wrap">
+				<style>
+					.ajax-form-wrap { width: 100%; overflow: hidden; margin: 0 0 20px 0; }
+					.ajax-form { float: left; width: 400px; }
+					.examples  { float: left; width: 200px; }
+					pre {
+					width: 95%; overflow: auto; margin: 20px 0; padding: 20px;
+					color: #fff; background-color: #424242;
+					}
+				</style>
+
+				<h1>Leaflogix Settings</h1>
+				<p><em>For an API key contact <a href="https://leaflogix.com/" target="_blank">Leaflogix</a>. For documentation and testing you can test your API key via the <a href="http://leaflogix-publicapi.azurewebsites.net/swagger/" target="_blank">LeafLogixAPI documentation</a>.</em></p>
+
         <?php settings_errors();?>
         <form method="POST" action="options.php">
 		    <?php settings_fields( LEAFLOGIX_SETTINGS_PAGE_SLUG );?>
 		    <?php do_settings_sections( LEAFLOGIX_SETTINGS_PAGE_SLUG )?>
 		    <?php submit_button();?>
         </form>
-        <div class="help-text"><em>For an API key contact <a href="https://leaflogix.com/" target="_blank">Leaflogix</a>. For documentation and testing you can test your API key via the <a href="http://leaflogix-publicapi.azurewebsites.net/swagger/" target="_blank">LeafLogixAPI documentation</a>.</em></div>
+				
+        <div class="ajax-response"></div>
     </div>
     <?php
+
 
 }
