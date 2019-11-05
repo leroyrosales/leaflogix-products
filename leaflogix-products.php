@@ -135,25 +135,42 @@ function http_get_products_response() {
 
 	$products = json_decode( $body );
 
-	set_transient( 'api_info', $products, 12 * 60 * 60 );
-
+	//set_transient( 'api_info', $products, 12 * 60 * 60 );
 
 	foreach ($products as $product) {
 		echo "<ul>";
-			echo "<li>Sku:<em>" . $product->sku . "</em></li>";
-			echo "<li>Name:<strong>" . $product->productName . "</strong></li>";
+			echo "<li>Sku: <em>" . $product->sku . "</em></li>";
+			echo "<li>Name: <strong>" . $product->productName . "</strong></li>";
 			echo "<li>Description: " . $product->description . "</li>";
 			echo "<li>Category: " . $product->category . "</li>";
-			echo "<li>Image: " . $product->image . "</li>";
-			echo "<li>Net weight:" . $product->netWeight . "</li>";
-			echo "<li>Strain: " . $product->strain . "</li>";
-			echo "<li>Size: " . $product->size . "</li>";
+			if($product->image){
+				echo "<li>Image: " . $product->image . "</li>";
+			}
+			if($product->netWeight){
+				echo "<li>Net weight:" . $product->netWeight . "</li>";
+			}
+			if($product->strain){
+				echo "<li>Strain: " . $product->strain . "</li>";
+			}
+			if($product->size){
+				echo "<li>Size: " . $product->size . "</li>";
+			}
 			echo "<li>Vendor: " . $product->vendorName . "</li>";
-			echo "<li>THC content:" . $product->thcContent . "</li>";
-			echo "<li>THC content unit: " . $product->thcContentUnit . "</li>";
-			echo "<li>CBD content: " . $product->cbdContent . "</li>";
-			echo "<li>CBD content unit: " . $product->cbdContentUnit . "</li>";
-			echo "<li>Brand name: " . $product->brandName . "</li>";
+			if($product->thcContent){
+				echo "<li>THC content:" . $product->thcContent . "</li>";
+			}
+			if($product->thcContentUnit){
+				echo "<li>THC content unit: " . $product->thcContentUnit . "</li>";
+			}
+			if($product->cbdContent){
+				echo "<li>CBD content: " . $product->cbdContent . "</li>";
+			}
+			if($product->cbdContentUnit){
+				echo "<li>CBD content unit: " . $product->cbdContentUnit . "</li>";
+			}
+			if($product->brandName){
+				echo "<li>Brand name: " . $product->brandName . "</li>";
+			}
 		echo "</ul>";
 		// sku
 		// product name
@@ -179,7 +196,6 @@ function http_get_products_response() {
 		// cbdContentUnit
 		// brandName 
 	}
-	echo '</ul>';
 
 	// $output .= '<h3>Headers</h3>';
 	// $output .= '<div>Response Date: ' . $header_date  .'</div>';
