@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Leaflogix Products
- * @version 0.1.0
+ * @version 0.2.0
  */
 /*
 Plugin Name: Leaflogix Products
@@ -103,6 +103,7 @@ function http_get_products_response() {
 		'method'      => 'GET',
 		'headers'     => array(
 			"Content-Type" => "application/json; charset=utf-8",
+			// "Cache-Control" => "max-age=3600",
 			"Authorization" => "Basic " . $api_key_text
 		),
 	);
@@ -123,32 +124,74 @@ function http_get_products_response() {
 
 
 	// output data
-	$output  = '<h2><code>'. $url .'</code></h2>';
+	//$output  = '<h2><code>'. $url .'</code></h2>';
 
-	$output .= 'API KEY: <code>' . $api_key_text . '</code>';
+	//$output .= 'API KEY: <code>' . $api_key_text . '</code>';
 
-	$output .= '<h3>Status</h3>';
-	$output .= '<div>Response Code: '    . $code    .'</div>';
-	$output .= '<div>Response Message: ' . $message .'</div>';
+	//$output .= '<h3>Status</h3>';
+	//$output .= '<div>Response Code: '    . $code    .'</div>';
+	//$output .= '<div>Response Message: ' . $message .'</div>';
 
-	$output .= '<h3>Body</h3>';
-	$output .= '<pre>';
-	ob_start();
-	var_dump( $body );
-	$output .= ob_get_clean();
-	$output .= '</pre>';
 
-	$output .= '<h3>Headers</h3>';
-	$output .= '<div>Response Date: ' . $header_date  .'</div>';
-	$output .= '<div>Content Type: '  . $header_type  .'</div>';
-	$output .= '<div>Cache Control: ' . $header_cache .'</div>';
-	$output .= '<pre>';
-	ob_start();
-	var_dump( $headers );
-	$output .= ob_get_clean();
-	$output .= '</pre>';
+	$products = json_decode( $body );
 
-	return $output;
+	set_transient( 'api_info', $products, 12 * 60 * 60 );
+
+
+	foreach ($products as $product) {
+		echo "<ul>";
+			echo "<li>Sku:<em>" . $product->sku . "</em></li>";
+			echo "<li>Name:<strong>" . $product->productName . "</strong></li>";
+			echo "<li>Description: " . $product->description . "</li>";
+			echo "<li>Category: " . $product->category . "</li>";
+			echo "<li>Image: " . $product->image . "</li>";
+			echo "<li>Net weight:" . $product->netWeight . "</li>";
+			echo "<li>Strain: " . $product->strain . "</li>";
+			echo "<li>Size: " . $product->size . "</li>";
+			echo "<li>Vendor: " . $product->vendorName . "</li>";
+			echo "<li>THC content:" . $product->thcContent . "</li>";
+			echo "<li>THC content unit: " . $product->thcContentUnit . "</li>";
+			echo "<li>CBD content: " . $product->cbdContent . "</li>";
+			echo "<li>CBD content unit: " . $product->cbdContentUnit . "</li>";
+			echo "<li>Brand name: " . $product->brandName . "</li>";
+		echo "</ul>";
+		// sku
+		// product name
+		// description
+		// category
+		// image
+		// quantity available
+		// weight, including flower equivalent
+		// batch name
+		// package status
+		// price
+		// strain
+		// size
+		// tested date
+		// sample date
+		// packaged date
+		// labResults
+		// labResultUnit
+		// vendorName
+		// thcContent
+		// thcContentUnit
+		// cbdContent
+		// cbdContentUnit
+		// brandName 
+	}
+	echo '</ul>';
+
+	// $output .= '<h3>Headers</h3>';
+	// $output .= '<div>Response Date: ' . $header_date  .'</div>';
+	// $output .= '<div>Content Type: '  . $header_type  .'</div>';
+	// $output .= '<div>Cache Control: ' . $header_cache .'</div>';
+	// $output .= '<pre>';
+	// ob_start();
+	// var_dump( $headers );
+	// $output .= ob_get_clean();
+	// $output .= '</pre>';
+
+	// return $output;
 
 }
-
+add_shortcode('leaflogix_products', 'http_get_products_response');
