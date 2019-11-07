@@ -16,12 +16,12 @@ define( "LEAFLOGIX_SETTINGS_PAGE_SLUG", "leaflogix-settings" );
 function leaflogix_settings_page() {
 
 	add_submenu_page(
-		"options-general.php", // top level menu page
-		"Leaflogix API Settings", // title of the settings page
-		"Leaflogix Settings", // title of the submenu
-		"manage_options", // capability of the user to see this page
-		LEAFLOGIX_SETTINGS_PAGE_SLUG, // slug of the settings page
-		"leaflogix_settings_page_func" // callback function to be called when rendering the page
+		"options-general.php",
+		"Leaflogix API Settings",
+		"Leaflogix Settings",
+		"manage_options",
+		LEAFLOGIX_SETTINGS_PAGE_SLUG,
+		"leaflogix_settings_page_func"
   );
   
   add_action( "admin_init", "leaflogix_settings_init" );
@@ -32,23 +32,24 @@ add_action( "admin_menu", "leaflogix_settings_page" );
 function leaflogix_settings_init() {
 
 	add_settings_section(
-		"leaflogix-settings-section", // id of the section
-		"Leaflogix Settings", // title to be displayed
-		"", // callback function to be called when opening section
-		LEAFLOGIX_SETTINGS_PAGE_SLUG // page on which to display the section, this should be the same as the slug used in add_submenu_page()
+		"leaflogix-settings-section",
+		"Leaflogix Settings",
+		"",
+		LEAFLOGIX_SETTINGS_PAGE_SLUG
 	);
-	// register the setting
+
+	// register the settings
 	register_setting(
-		LEAFLOGIX_SETTINGS_PAGE_SLUG, // option group
+		LEAFLOGIX_SETTINGS_PAGE_SLUG,
 		"leaflogix_swagger_api_key"
   );
   
 	add_settings_field(
-		"leaflogix-api-key", // id of the settings field
-		"API Key", // title
-		"leaflogix_settings_cb", // callback function
-		LEAFLOGIX_SETTINGS_PAGE_SLUG, // page on which settings display
-		"leaflogix-settings-section" // section on which to show settings
+		"leaflogix-api-key",
+		"API Key",
+		"leaflogix_settings_cb",
+		LEAFLOGIX_SETTINGS_PAGE_SLUG,
+		"leaflogix-settings-section"
   );
   
 }
@@ -73,24 +74,26 @@ function leaflogix_settings_page_func() {
 	}
 	?>
 
-    <div class="wrap">
+  <div class="wrap">
 		<style>
-		pre {
+			pre {
 			width: 95%; overflow: auto; margin: 20px 0; padding: 20px;
 			color: #fff; background-color: #424242;
-		}
-	</style>
-        <?php settings_errors();?>
-        <form method="POST" action="options.php">
-		    <?php settings_fields( LEAFLOGIX_SETTINGS_PAGE_SLUG );?>
-		    <?php do_settings_sections( LEAFLOGIX_SETTINGS_PAGE_SLUG )?>
-		    <?php submit_button();?>
-        </form>
-        <div class="help-text"><em>For an API key contact <a href="https://leaflogix.com/" target="_blank">Leaflogix</a>. For documentation and testing you can test your API key via the <a href="http://leaflogix-publicapi.azurewebsites.net/swagger/" target="_blank">LeafLogixAPI documentation</a>.</em></div>
+			}
+		</style>
 
-				<?php echo http_get_products_response(); ?>
-    </div>
-    <?php
+		<?php settings_errors();?>
+
+		<form method="POST" action="options.php">
+			<?php settings_fields( LEAFLOGIX_SETTINGS_PAGE_SLUG );?>
+			<?php do_settings_sections( LEAFLOGIX_SETTINGS_PAGE_SLUG )?>
+			<?php submit_button();?>
+		</form>
+		
+		<p><em>For an API key contact <a href="https://leaflogix.com/" target="_blank">Leaflogix</a>. For documentation and testing you can test your API key via the <a href="http://leaflogix-publicapi.azurewebsites.net/swagger/" target="_blank">LeafLogixAPI documentation</a>.</em></p>
+
+  </div> 
+	<?php
 
 }
 
@@ -103,7 +106,6 @@ function http_get_products_response() {
 		'method'      => 'GET',
 		'headers'     => array(
 			"Content-Type" => "application/json; charset=utf-8",
-			// "Cache-Control" => "max-age=3600",
 			"Authorization" => "Basic " . $api_key_text
 		),
 	);
@@ -113,25 +115,7 @@ function http_get_products_response() {
 	$response = wp_safe_remote_get( $url, $args );
 
 	// response data
-	$code    = wp_remote_retrieve_response_code( $response );
-	$message = wp_remote_retrieve_response_message( $response );
 	$body    = wp_remote_retrieve_body( $response );
-	$headers = wp_remote_retrieve_headers( $response );
-
-	$header_date  = wp_remote_retrieve_header( $response, 'date' );
-	$header_type  = wp_remote_retrieve_header( $response, 'content-type' );
-	$header_cache = wp_remote_retrieve_header( $response, 'cache-control' );
-
-
-	// output data
-	//$output  = '<h2><code>'. $url .'</code></h2>';
-
-	//$output .= 'API KEY: <code>' . $api_key_text . '</code>';
-
-	//$output .= '<h3>Status</h3>';
-	//$output .= '<div>Response Code: '    . $code    .'</div>';
-	//$output .= '<div>Response Message: ' . $message .'</div>';
-
 
 	if ( false === ( $products = get_transient( 'cached_products' ) ) ) {
 
@@ -203,18 +187,6 @@ function http_get_products_response() {
 		// cbdContentUnit
 		// brandName 
 	}
-
-	// $output .= '<h3>Headers</h3>';
-	// $output .= '<div>Response Date: ' . $header_date  .'</div>';
-	// $output .= '<div>Content Type: '  . $header_type  .'</div>';
-	// $output .= '<div>Cache Control: ' . $header_cache .'</div>';
-	// $output .= '<pre>';
-	// ob_start();
-	// var_dump( $headers );
-	// $output .= ob_get_clean();
-	// $output .= '</pre>';
-
-	// return $output;
 
 }
 add_shortcode('leaflogix_products', 'http_get_products_response');
