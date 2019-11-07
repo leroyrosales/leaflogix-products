@@ -133,9 +133,16 @@ function http_get_products_response() {
 	//$output .= '<div>Response Message: ' . $message .'</div>';
 
 
-	$products = json_decode( $body );
+	if ( false === ( $products = get_transient( 'cached_products' ) ) ) {
 
-	//set_transient( 'api_info', $products, 12 * 60 * 60 );
+		$products = json_decode( $body );
+
+		set_transient( 'cached_products', $products, 12 * 60 * 60 );
+
+		$products = get_transient( 'cached_products' );
+	
+	}
+	
 
 	foreach ($products as $product) {
 		echo "<ul>";
