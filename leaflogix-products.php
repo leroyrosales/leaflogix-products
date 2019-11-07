@@ -1,8 +1,4 @@
 <?php
-/**
- * @package Leaflogix Products
- * @version 0.2.0
- */
 /*
 Plugin Name: Leaflogix Products
 Description: WordPress plugin to create products listing via the Leaflogix API.
@@ -75,12 +71,6 @@ function leaflogix_settings_page_func() {
 	?>
 
   <div class="wrap">
-		<style>
-			pre {
-			width: 95%; overflow: auto; margin: 20px 0; padding: 20px;
-			color: #fff; background-color: #424242;
-			}
-		</style>
 
 		<?php settings_errors();?>
 
@@ -190,3 +180,4 @@ function http_get_products_response() {
 
 }
 add_shortcode('leaflogix_products', 'http_get_products_response');
+
