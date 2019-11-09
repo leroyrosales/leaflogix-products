@@ -112,56 +112,60 @@ function http_get_products_response() {
 	$inventory_body = wp_remote_retrieve_body( $inventory_response );
 
 	// decode data
-	$products_json = json_decode( $products_body );
-	$inventory_json = json_decode( $inventory_body );
+	$products_json = json_decode( $products_body, true );
+	$inventory_json = json_decode( $inventory_body, true );
 
 	// merge arrays
-	$products =  array_merge( $products_json, $inventory_json )
+	//$products =  array_merge( $products_json, $inventory_json );
 
-	print_r( $products );
+	$products = array_column(array_merge($products_json,$inventory_json), NULL, 'sku');
+
+	//print_r( $merged_keyed );
 	//$uni_products =  array_map( null, $products, );
 
 	//$uni_products = array_map(null,  $products);
 
-	// foreach($products as $product){
-	// 	echo "<ul>";
-	// 		echo "<li>Sku: <em>" . $product->sku . "</em></li>";
-	// 		echo "<li>Name: <strong>" . $product->productName . "</strong></li>";
-	// 		echo "<li>Description: " . $product->description . "</li>";
-	// 		echo "<li>Category: " . $product->category . "</li>";
-	// 		if($product->imageUrl){
-	// 			echo "<li><img src='" . $product->imageUrl . "'</li>";
-	// 		}
-	// 		if($product->quantityAvailable) {
-	// 			echo "<li>Quantity: " . $product->quantityAvailable . "</li>";
-	// 		}
-	// 		if($product->netWeight){
-	// 			echo "<li>Net weight:" . $product->netWeight . "</li>";
-	// 		}
-	// 		if($product->strain){
-	// 			echo "<li>Strain: " . $product->strain . "</li>";
-	// 		}
-	// 		if($product->size){
-	// 			echo "<li>Size: " . $product->size . "</li>";
-	// 		}
-	// 		echo "<li>Vendor: " . $product->vendorName . "</li>";
-	// 		if($product->thcContent){
-	// 			echo "<li>THC content:" . $product->thcContent . "</li>";
-	// 		}
-	// 		if($product->thcContentUnit){
-	// 			echo "<li>THC content unit: " . $product->thcContentUnit . "</li>";
-	// 		}
-	// 		if($product->cbdContent){
-	// 			echo "<li>CBD content: " . $product->cbdContent . "</li>";
-	// 		}
-	// 		if($product->cbdContentUnit){
-	// 			echo "<li>CBD content unit: " . $product->cbdContentUnit . "</li>";
-	// 		}
-	// 		if($product->brandName){
-	// 			echo "<li>Brand name: " . $product->brandName . "</li>";
-	// 		}
-	// 	echo "</ul>";
-	// }
+	foreach($products as $product){
+		echo "<ul>";
+			echo "<li>Sku: <em>" . $product["sku"] . "</em></li>";
+			echo "<li>Name: <strong>" . $product["productName"] . "</strong></li>";
+			echo "<li>Description: " . $product["description"] . "</li>";
+			echo "<li>Category: " . $product["category"] . "</li>";
+			if($product["imageUrl"]){
+				echo "<li><img src='" . $product["imageUrl"] . "'</li>";
+			}
+			if($product["quantityAvailable"]) {
+				echo "<li>Quantity: " . $product["quantityAvailable"] . "</li>";
+			}
+			if($product["netWeight"]){
+				echo "<li>Net weight:" . $product["netWeight"] . "</li>";
+			}
+			if($product["strain"]){
+				echo "<li>Strain: " . $product["strain"] . "</li>";
+			}
+			if($product["size"]){
+				echo "<li>Size: " . $product["size"] . "</li>";
+			}
+			if($product["vendorName"]) {
+				echo "<li>Vendor: " . $product["vendorName"] . "</li>";
+			}
+			if($product["thcContent"]){
+				echo "<li>THC content:" . $product["thcContent"] . "</li>";
+			}
+			if($product["thcContentUnit"]){
+				echo "<li>THC content unit: " . $product["thcContentUnit"] . "</li>";
+			}
+			if($product["cbdContent"]){
+				echo "<li>CBD content: " . $product["cbdContent"] . "</li>";
+			}
+			if($product["cbdContentUnit"]){
+				echo "<li>CBD content unit: " . $product["cbdContentUnit"] . "</li>";
+			}
+			if($product["brandName"]){
+				echo "<li>Brand name: " . $product["brandName"] . "</li>";
+			}
+		echo "</ul>";
+	}
 
 	// var_dump($obj3);
 
