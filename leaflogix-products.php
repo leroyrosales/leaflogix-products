@@ -131,7 +131,9 @@ function http_get_products_response() {
 		echo "<ul>";
 			echo "<li>Sku: <em>" . $product["sku"] . "</em></li>";
 			echo "<li>Name: <strong>" . $product["productName"] . "</strong></li>";
-			echo "<li>Description: " . $product["description"] . "</li>";
+			if( $product["description"] ) {
+				echo "<li>Description: " . $product["description"] . "</li>";
+			}
 			echo "<li>Category: " . $product["category"] . "</li>";
 			if($product["imageUrl"]){
 				echo "<li><img src='" . $product["imageUrl"] . "'</li>";
