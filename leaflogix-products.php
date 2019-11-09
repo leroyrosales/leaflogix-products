@@ -129,14 +129,14 @@ function http_get_products_response() {
 	// foreach loop
 	foreach($products as $product){
 		echo "<ul>";
-			echo "<li>Sku: <em>" . $product["sku"] . "</em></li>";
+			echo "<li>SKU: <em>" . $product["sku"] . "</em></li>";
 			echo "<li>Name: <strong>" . $product["productName"] . "</strong></li>";
 			if( $product["description"] ) {
 				echo "<li>Description: " . $product["description"] . "</li>";
 			}
 			echo "<li>Category: " . $product["category"] . "</li>";
 			if($product["imageUrl"]){
-				echo "<li><img src='" . $product["imageUrl"] . "'</li>";
+				echo "<li><img alt='Photo of " . $product["productName"] ."' src='" . $product["imageUrl"] . "'></li>";
 			}
 			if($product["quantityAvailable"]) {
 				echo "<li>Quantity: " . $product["quantityAvailable"] . "</li>";
