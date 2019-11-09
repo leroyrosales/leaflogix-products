@@ -92,33 +92,33 @@ function http_get_products_response() {
 
 	if ( false === ( $products = get_transient( 'cached_products' ) ) ) {
 
-	$api_key_text = base64_encode( esc_attr(get_option("leaflogix_swagger_api_key", "")) );
+		$api_key_text = base64_encode( esc_attr(get_option("leaflogix_swagger_api_key", "")) );
 
-	$args = array(
-		'method'      => 'GET',
-		'headers'     => array(
-			"Content-Type" => "application/json; charset=utf-8",
-			"Authorization" => "Basic " . $api_key_text
-		),
-	);
+		$args = array(
+			'method'      => 'GET',
+			'headers'     => array(
+				"Content-Type" => "application/json; charset=utf-8",
+				"Authorization" => "Basic " . $api_key_text
+			),
+		);
 
-	// api endpoints
-	$products_api = esc_url_raw( "http://leaflogix-publicapi.azurewebsites.net/products" );
-	$inventroy_api = esc_url_raw( "http://leaflogix-publicapi.azurewebsites.net/inventory?includeLabResults=true&includeRoomQuantities=true" );
+		// api endpoints
+		$products_api = esc_url_raw( "http://leaflogix-publicapi.azurewebsites.net/products" );
+		$inventroy_api = esc_url_raw( "http://leaflogix-publicapi.azurewebsites.net/inventory?includeLabResults=true&includeRoomQuantities=true" );
 
-	$products_response = wp_safe_remote_get( $products_api, $args );
-	$inventory_response = wp_safe_remote_get( $inventroy_api, $args );
+		$products_response = wp_safe_remote_get( $products_api, $args );
+		$inventory_response = wp_safe_remote_get( $inventroy_api, $args );
 
-	// response data
-	$products_body = wp_remote_retrieve_body( $products_response );
-	$inventory_body = wp_remote_retrieve_body( $inventory_response );
+		// response data
+		$products_body = wp_remote_retrieve_body( $products_response );
+		$inventory_body = wp_remote_retrieve_body( $inventory_response );
 
-	// decode data to arrays
-	$products_json = json_decode( $products_body, true );
-	$inventory_json = json_decode( $inventory_body, true );
+		// decode data to arrays
+		$products_json = json_decode( $products_body, true );
+		$inventory_json = json_decode( $inventory_body, true );
 
-	// merge arrays
-	$products = array_column(array_merge($products_json,$inventory_json), NULL, 'sku');
+		// merge arrays
+		$products = array_column(array_merge($products_json,$inventory_json), NULL, 'sku');
 
 		set_transient( 'cached_products', $products, 12 * 60 * 60 ); // 12 hours
 
@@ -126,6 +126,7 @@ function http_get_products_response() {
 
 	}
 
+	// foreach loop
 	foreach($products as $product){
 		echo "<ul>";
 			echo "<li>Sku: <em>" . $product["sku"] . "</em></li>";
@@ -167,86 +168,6 @@ function http_get_products_response() {
 			}
 		echo "</ul>";
 	}
-
-	// var_dump($obj3);
-
-	// $products = array_combine($products_json, $inventory_json);
-
-	// foreach($products as $tuple) {
-	// 		// here you could do list($n, $t) = $tuple; to get pretty variable names
-	// 		var_dump($tuple);
-	// }
-
-	// var_dump( $products );
-
-	// print_r( $products );
-
-	// if ( false === ( $products = get_transient( 'cached_products' ) ) ) {
-
-	// 	set_transient( 'cached_products', $products, 60 );
-
-	// 	$products = get_transient( 'cached_products' );
-
-	// }
-	
-
-	// foreach ($products as $product) {
-	// 	echo "<ul>";
-	// 		echo "<li>Sku: <em>" . $product->sku . "</em></li>";
-	// 		echo "<li>Name: <strong>" . $product->productName . "</strong></li>";
-	// 		echo "<li>Description: " . $product->description . "</li>";
-	// 		echo "<li>Category: " . $product->category . "</li>";
-	// 		if($product->imageUrl){
-	// 			echo "<li><img src='" . $product->imageUrl . "'</li>";
-	// 		}
-	// 		if($product->quantityAvailable) {
-	// 			echo "<li>Quantity: " . $product->quantityAvailable . "</li>";
-	// 		}
-	// 		if($product->netWeight){
-	// 			echo "<li>Net weight:" . $product->netWeight . "</li>";
-	// 		}
-	// 		if($product->strain){
-	// 			echo "<li>Strain: " . $product->strain . "</li>";
-	// 		}
-	// 		if($product->size){
-	// 			echo "<li>Size: " . $product->size . "</li>";
-	// 		}
-	// 		echo "<li>Vendor: " . $product->vendorName . "</li>";
-	// 		if($product->thcContent){
-	// 			echo "<li>THC content:" . $product->thcContent . "</li>";
-	// 		}
-	// 		if($product->thcContentUnit){
-	// 			echo "<li>THC content unit: " . $product->thcContentUnit . "</li>";
-	// 		}
-	// 		if($product->cbdContent){
-	// 			echo "<li>CBD content: " . $product->cbdContent . "</li>";
-	// 		}
-	// 		if($product->cbdContentUnit){
-	// 			echo "<li>CBD content unit: " . $product->cbdContentUnit . "</li>";
-	// 		}
-	// 		if($product->brandName){
-	// 			echo "<li>Brand name: " . $product->brandName . "</li>";
-	// 		}
-	// 	echo "</ul>";
-	// 	// quantity available
-	// 	// weight, including flower equivalent
-	// 	// batch name
-	// 	// package status
-	// 	// price
-	// 	// strain
-	// 	// size
-	// 	// tested date
-	// 	// sample date
-	// 	// packaged date
-	// 	// labResults
-	// 	// labResultUnit
-	// 	// vendorName
-	// 	// thcContent
-	// 	// thcContentUnit
-	// 	// cbdContent
-	// 	// cbdContentUnit
-	// 	// brandName 
-	// }
 
 }
 add_shortcode('leaflogix_products', 'http_get_products_response');
