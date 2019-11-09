@@ -90,6 +90,8 @@ function leaflogix_settings_page_func() {
 // GET response function
 function http_get_products_response() {
 
+	if ( false === ( $products = get_transient( 'cached_products' ) ) ) {
+
 	$api_key_text = base64_encode( esc_attr(get_option("leaflogix_swagger_api_key", "")) );
 
 	$args = array(
@@ -111,19 +113,18 @@ function http_get_products_response() {
 	$products_body = wp_remote_retrieve_body( $products_response );
 	$inventory_body = wp_remote_retrieve_body( $inventory_response );
 
-	// decode data
+	// decode data to arrays
 	$products_json = json_decode( $products_body, true );
 	$inventory_json = json_decode( $inventory_body, true );
 
 	// merge arrays
-	//$products =  array_merge( $products_json, $inventory_json );
-
 	$products = array_column(array_merge($products_json,$inventory_json), NULL, 'sku');
 
-	//print_r( $merged_keyed );
-	//$uni_products =  array_map( null, $products, );
+		set_transient( 'cached_products', $products, 12 * 60 * 60 ); // 12 hours
 
-	//$uni_products = array_map(null,  $products);
+		$products = get_transient( 'cached_products' );
+
+	}
 
 	foreach($products as $product){
 		echo "<ul>";
