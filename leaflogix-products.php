@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Leaflogix Products
-Description: WordPress plugin to create products listing via the Leaflogix API.
-Version: 0.1.0
+Plugin Name: LeafLogix Products
+Description: WordPress plugin to create products listing via the LeafLogix API.
+Version: 1.0
 Author: Leroy Rosales
 Author URI: https://leroyrosales.com/
 */
