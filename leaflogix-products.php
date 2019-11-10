@@ -123,53 +123,60 @@ function http_get_products_response() {
 		set_transient( 'cached_products', $products, 12 * 60 * 60 ); // 12 hours
 
 		$products = get_transient( 'cached_products' );
-
+		
 	}
+	
+	ob_start();
 
 	// foreach loop
-	foreach($products as $product){
-		echo "<ul>";
-			echo "<li>SKU: <em>" . $product["sku"] . "</em></li>";
-			echo "<li>Name: <strong>" . $product["productName"] . "</strong></li>";
-			if( $product["description"] ) {
-				echo "<li>Description: " . $product["description"] . "</li>";
-			}
-			echo "<li>Category: " . $product["category"] . "</li>";
-			if($product["imageUrl"]){
-				echo "<li><img alt='Photo of " . $product["productName"] ."' src='" . $product["imageUrl"] . "'></li>";
-			}
-			if($product["quantityAvailable"]) {
-				echo "<li>Quantity: " . $product["quantityAvailable"] . "</li>";
-			}
-			if($product["netWeight"]){
-				echo "<li>Net weight:" . $product["netWeight"] . "</li>";
-			}
-			if($product["strain"]){
-				echo "<li>Strain: " . $product["strain"] . "</li>";
-			}
-			if($product["size"]){
-				echo "<li>Size: " . $product["size"] . "</li>";
-			}
-			if($product["vendorName"]) {
-				echo "<li>Vendor: " . $product["vendorName"] . "</li>";
-			}
-			if($product["thcContent"]){
-				echo "<li>THC content:" . $product["thcContent"] . "</li>";
-			}
-			if($product["thcContentUnit"]){
-				echo "<li>THC content unit: " . $product["thcContentUnit"] . "</li>";
-			}
-			if($product["cbdContent"]){
-				echo "<li>CBD content: " . $product["cbdContent"] . "</li>";
-			}
-			if($product["cbdContentUnit"]){
-				echo "<li>CBD content unit: " . $product["cbdContentUnit"] . "</li>";
-			}
-			if($product["brandName"]){
-				echo "<li>Brand name: " . $product["brandName"] . "</li>";
-			}
-		echo "</ul>";
+	foreach($products as $product){ ?>
+		<ul>
+			<li>Name: <strong><?php echo $product["productName"]; ?></strong></li>
+			<li>SKU: <em><?php echo $product["sku"]; ?></em></li>
+			<?php if( $product["description"] ) { ?>
+				<li>Description: <?php echo $product["description"]; ?></li>
+			<?php } ?>
+			<li>Category: <?php echo $product["category"]; ?></li>
+			<?php if( $product["imageUrl"] ) { ?>
+				<li><img alt="Photo of "<?php echo $product["productName"]; ?>" src="<?php echo $product["imageUrl"]; ?>"></li>
+			<?php } ?>
+			<?php if( $product["quantityAvailable"] ) { ?>
+				<li>Quantity: <?php echo $product["quantityAvailable"]; ?></li>
+			<?php } ?>
+			<?php if( $product["netWeight"] ) { ?>
+				<li>Net weight: <?php echo $product["netWeight"]; ?></li>
+			<?php } ?>
+			<?php if( $product["strain"] ) { ?>
+				<li>Strain: <?php echo $product["strain"]; ?></li>
+			<?php } ?>
+			<?php if( $product["size"] ) { ?>
+				<li>Size: <?php echo $product["size"]; ?></li>
+			<?php } ?>
+			<?php if( $product["vendorName"] ) { ?>
+				<li>Vendor: <?php echo $product["vendorName"]; ?></li>
+			<?php } ?>
+			<?php if( $product["thcContent"] ) { ?>
+				<li>THC content: <?php echo $product["thcContent"]; ?></li>
+			<?php } ?>
+			<?php if( $product["thcContentUnit"] ) { ?>
+				<li>THC content unit: <?php echo $product["thcContentUnit"]; ?></li>
+			<?php } ?>
+			<?php if( $product["cbdContent"] ) { ?>
+				<li>CBD content: <?php echo $product["cbdContent"]; ?></li>
+			<?php } ?>
+			<?php if( $product["cbdContentUnit"] ) { ?>
+				<li>CBD content unit: <?php echo $product["cbdContentUnit"]; ?></li>
+			<?php } ?>
+			<?php if( $product["brandName"] ) { ?>
+				<li>Brand name: <?php echo $product["brandName"]; ?></li>
+			<?php } ?>
+		</ul>
+	<?php 
 	}
+
+	$leaflogix_products = ob_get_clean();
+
+	return $leaflogix_products;
 
 }
 add_shortcode('leaflogix_products', 'http_get_products_response');
